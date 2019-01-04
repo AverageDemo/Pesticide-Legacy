@@ -4,6 +4,7 @@ const passport = require("passport");
 const bodyParser = require("body-parser");
 
 const users = require("./routes/api/users");
+const issues = require("./routes/api/issues");
 
 const app = express();
 
@@ -26,5 +27,6 @@ app.use(passport.initialize());
 require("./config/passport")(passport);
 
 app.use("/api/users", users);
+app.use("/api/issues", issues);
 
 app.listen(keys.port, () => console.log(`Server running on port ${keys.port}`));
