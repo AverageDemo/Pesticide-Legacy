@@ -50,6 +50,25 @@ router.post("/newIssue", passport.authenticate("jwt", { session: false }), (req,
 });
 
 /*
+ * @route   GET api/issues/:issueTag
+ * @desc    View an issue
+ * @access  Public
+ */
+
+router.get("/:issueTag", (req, res) => {
+    Issue.findOne({ tag: req.params.issueTag })
+        .then(issue => {
+            if (!issue) {
+                errors.issue = "Issue not found!";
+                return res.status(404).json(errors);
+            }
+
+            res.json(issue);
+        })
+        .catch(err => console.log(err));
+});
+
+/*
  * @route   POST api/issues/newCategory
  * @desc    Create a new category
  * @access  Private / Admin
