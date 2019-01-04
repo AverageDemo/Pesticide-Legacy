@@ -8,6 +8,7 @@ const Category = require("../../models/Category");
 const Issue = require("../../models/Issue");
 
 const validateNewIssueInput = require("../../validation/newissue");
+const validateNewCategoryInput = require("../../validation/newcategory");
 
 /*
  * @route   GET api/issues
@@ -48,15 +49,39 @@ router.post("/newIssue", passport.authenticate("jwt", { session: false }), (req,
         .catch(err => console.log(err));
 });
 
-// This is strictly for test. It will be restricted in the future.
-router.post("/newCategory", (req, res) => {
-    const newCategory = new Category({
-        name: req.body.name
-    });
+/*
+ * @route   POST api/issues/newCategory
+ * @desc    Create a new category
+ * @access  Private / Admin
+ */
 
-    newCategory
-        .save()
-        .then(newCategory => res.json(newCategory))
+router.post("/newCategory", passport.authenticate("jwt", { session: false }), (req, res) => {
+    const { errors, isValid } = validateNewCategoryInput(req.body);
+
+    User.findById(req.user.id)
+        .then(user => {
+            if (!user.isAdmin) return res.status(401).json({ error: "Unauthorized" });
+
+            if (!isValid) return res.status(400).json(errors);
+
+            Category.findOne({ name: { $regex: new RegExp("^" + req.body.name + "$", "i") } })
+                .then(category => {
+                    if (category) {
+                        errors.title = "A category with this title already exists!";
+                        return res.status(400).json(errors);
+                    }
+
+                    const newCategory = new Category({
+                        name: req.body.name
+                    });
+
+                    newCategory
+                        .save()
+                        .then(newCategory => res.json(newCategory))
+                        .catch(err => console.log(err));
+                })
+                .catch(err => console.log(err));
+        })
         .catch(err => console.log(err));
 });
 
