@@ -8,6 +8,7 @@ const Category = require("../../models/Category");
 const Issue = require("../../models/Issue");
 
 const validateNewIssueInput = require("../../validation/newissue");
+const validateNewCommentInput = require("../../validation/newcomment");
 const validateNewCategoryInput = require("../../validation/newcategory");
 
 /*
@@ -56,7 +57,7 @@ router.post("/newIssue", passport.authenticate("jwt", { session: false }), (req,
  */
 
 router.get("/:issueTag", (req, res) => {
-    Issue.findOne({ tag: req.params.issueTag })
+    Issue.findOne({ tag: { $regex: new RegExp("^" + req.params.issueTag + "$", "i") } })
         .then(issue => {
             if (!issue) {
                 errors.issue = "Issue not found!";
@@ -98,6 +99,68 @@ router.post("/newCategory", passport.authenticate("jwt", { session: false }), (r
                         .save()
                         .then(newCategory => res.json(newCategory))
                         .catch(err => console.log(err));
+                })
+                .catch(err => console.log(err));
+        })
+        .catch(err => console.log(err));
+});
+
+/*
+ * @route   POST api/issues/:issueTag/comment
+ * @desc    Add a new comment to an issue
+ * @access  Private
+ */
+
+router.post("/:issueTag/comment", passport.authenticate("jwt", { session: false }), (req, res) => {
+    const { errors, isValid } = validateNewCommentInput(req.body);
+
+    if (!isValid) return res.status(400).json(errors);
+
+    Issue.findOne({ tag: { $regex: new RegExp("^" + req.params.issueTag + "$", "i") } })
+        .then(issue => {
+            if (!issue) {
+                errors.issue = "Issue not found!";
+                return res.status(404).json(errors);
+            }
+
+            if (issue.isResolved) {
+                errors.issue = "This issue is closed!";
+                return res.status(400).json(errors);
+            }
+
+            const newComment = {
+                value: req.body.value,
+                author: req.user.id
+            };
+
+            issue.comments.unshift(newComment);
+
+            issue
+                .save()
+                .then(issue => res.json(issue))
+                .catch(err => console.log(err));
+        })
+        .catch(err => console.log(err));
+});
+
+/*
+ * @route   POST api/issues/:issueTag/close
+ * @desc    Mark an issue as solved
+ * @access  Private / admin / developer
+ */
+
+router.post("/:issueTag/close", passport.authenticate("jwt", { session: false }), (req, res) => {
+    User.findById(req.user.id)
+        .then(user => {
+            if (!user.isAdmin && !user.isDeveloper)
+                return res.status(401).json({ error: "Unauthorized" });
+
+            Issue.findOneAndUpdate(
+                { tag: { $regex: new RegExp("^" + req.params.issueTag + "$", "i") } },
+                { $set: { isResolved: true, devNotes: req.body.value } }
+            )
+                .then(issue => {
+                    res.json(issue);
                 })
                 .catch(err => console.log(err));
         })

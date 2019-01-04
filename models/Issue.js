@@ -45,6 +45,10 @@ const IssueSchema = new Schema({
             author: {
                 type: Schema.Types.ObjectId,
                 ref: "users"
+            },
+            date: {
+                type: Date,
+                default: Date.now
             }
         }
     ],
