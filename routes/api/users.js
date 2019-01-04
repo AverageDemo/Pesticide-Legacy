@@ -104,7 +104,7 @@ router.post("/login", (req, res) => {
                             });
                         });
                     } else {
-                        errors.username = "Account is not yet active";
+                        errors.username = "Please confirm your email!";
                         res.status(400).json(errors);
                     }
                 } else {
