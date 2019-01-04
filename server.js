@@ -3,12 +3,14 @@ const mongoose = require("mongoose");
 const passport = require("passport");
 const bodyParser = require("body-parser");
 
+const users = require("./routes/api/users");
+
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-const keys = require("./config/keys.js");
+const keys = require("./config/keys");
 
 mongoose.set("useFindAndModify", false);
 mongoose
@@ -22,6 +24,8 @@ mongoose
 app.use(passport.initialize());
 
 require("./config/passport")(passport);
+
+app.use("/api/users", users);
 
 const port = process.env.PORT || 5000;
 
