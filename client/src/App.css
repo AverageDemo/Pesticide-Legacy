@@ -1,32 +1,69 @@
-.App {
-  text-align: center;
+body {
+    min-height: 100vh;
 }
-
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
+.container {
+    max-width: 50%;
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.card {
+    margin-bottom: 25px;
 }
-
-.App-link {
-  color: #61dafb;
+.nav-scroller {
+    position: relative;
+    z-index: 2;
+    height: 2.75rem;
+    overflow-y: hidden;
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.nav-scroller .nav {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+    padding-bottom: 1rem;
+    margin-top: -1px;
+    overflow-x: auto;
+    color: rgba(255, 255, 255, 0.75);
+    text-align: center;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+}
+.nav-underline .nav-link {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    font-size: 0.875rem;
+    color: #6c757d;
+}
+.nav-underline .nav-link:hover {
+    color: #007bff;
+}
+.nav-underline .active {
+    font-weight: 500;
+    color: #343a40;
+}
+.text-white-50 {
+    color: rgba(255, 255, 255, 0.5);
+}
+.bg-purple {
+    background-color: #6f42c1;
+}
+.lh-100 {
+    line-height: 1;
+}
+.lh-125 {
+    line-height: 1.25;
+}
+.lh-150 {
+    line-height: 1.5;
+}
+.forum-banner-name {
+    font-size: 1em;
+    font-weight: bold;
+}
+.forum-banner-tag {
+    font-size: 0.9em;
+}
+.nav-scroller > .nav > .nav-link {
+    color: #000 !important;
+}
+.content-box {
+    min-height: 100vh;
 }
