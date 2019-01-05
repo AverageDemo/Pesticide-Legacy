@@ -1,69 +1,33 @@
 body {
     min-height: 100vh;
 }
-.container {
-    max-width: 50%;
-}
-.card {
-    margin-bottom: 25px;
-}
-.nav-scroller {
-    position: relative;
-    z-index: 2;
-    height: 2.75rem;
-    overflow-y: hidden;
-}
-.nav-scroller .nav {
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-wrap: nowrap;
-    flex-wrap: nowrap;
-    padding-bottom: 1rem;
-    margin-top: -1px;
-    overflow-x: auto;
-    color: rgba(255, 255, 255, 0.75);
-    text-align: center;
-    white-space: nowrap;
-    -webkit-overflow-scrolling: touch;
-}
-.nav-underline .nav-link {
-    padding-top: 0.75rem;
-    padding-bottom: 0.75rem;
-    font-size: 0.875rem;
-    color: #6c757d;
-}
-.nav-underline .nav-link:hover {
-    color: #007bff;
-}
-.nav-underline .active {
-    font-weight: 500;
-    color: #343a40;
-}
-.text-white-50 {
-    color: rgba(255, 255, 255, 0.5);
-}
-.bg-purple {
-    background-color: #6f42c1;
-}
-.lh-100 {
-    line-height: 1;
-}
-.lh-125 {
-    line-height: 1.25;
-}
-.lh-150 {
-    line-height: 1.5;
-}
-.forum-banner-name {
-    font-size: 1em;
-    font-weight: bold;
-}
-.forum-banner-tag {
-    font-size: 0.9em;
-}
-.nav-scroller > .nav > .nav-link {
-    color: #000 !important;
-}
 .content-box {
     min-height: 100vh;
+}
+.bg-color {
+    background-color: #2a2a2a;
+}
+footer {
+    background-color: #e6e6e6;
+}
+.container {
+    width: 1170px;
+}
+h4 > strong {
+    color: #2a2a2a;
+}
+.bg-danger {
+    background-color: #f2dede !important;
+}
+.bg-success {
+    background-color: #dbf5d3 !important;
+}
+.bg-danger > .card-header {
+    color: #d9534f;
+}
+.bg-success > .card-header {
+    color: #569845;
+}
+.footerItem {
+    color: inherit;
 }
