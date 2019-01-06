@@ -83,7 +83,7 @@ class Register extends Component {
                                         className={classnames("form-control form-control-lg", {
                                             "is-invalid": errors.email
                                         })}
-                                        placeholder="Email Address (We use gravatar)"
+                                        placeholder="Email Address"
                                         name="email"
                                         value={this.state.email}
                                         onChange={this.onChange}
