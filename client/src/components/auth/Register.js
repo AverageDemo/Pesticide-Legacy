@@ -18,6 +18,12 @@ class Register extends Component {
         };
     }
 
+    componentDidMount() {
+        if (this.props.auth.isAuthenticated) {
+            this.props.history.push("/");
+        }
+    }
+
     componentWillReceiveProps(nextProps) {
         nextProps.errors && this.setState({ errors: nextProps.errors });
     }
@@ -49,7 +55,7 @@ class Register extends Component {
             <div className="register flex-fill">
                 <div className="container">
                     <div className="row">
-                        <div className="col-md-8 m-auto">
+                        <div className="col-md-6 m-auto">
                             <h1 className="display-4 text-center mt-3 mb-5">Sign Up</h1>
                             <form noValidate onSubmit={this.onSubmit}>
                                 <div className="form-group">
@@ -127,7 +133,7 @@ class Register extends Component {
                                         <div className="invalid-feedback">{errors.password2}</div>
                                     )}
                                 </div>
-                                <input type="submit" className="btn btn-info btn-block mt-4" />
+                                <input type="submit" className="btn btn-dark btn-block mt-4" />
                             </form>
                         </div>
                     </div>

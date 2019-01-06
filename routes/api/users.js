@@ -50,6 +50,7 @@ router.post("/register", (req, res) => {
                 username,
                 name: req.body.name,
                 password: req.body.password,
+                isVerified: true, // Remove this line when email verification is integrated fully.
                 veriToken: randString.generate(10)
             });
 
