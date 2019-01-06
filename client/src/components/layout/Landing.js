@@ -15,12 +15,24 @@ class Landing extends Component {
                             <h4 id="searchHelp" className="form-text text-muted mb-3">
                                 You can search by <strong>name</strong> or <strong>ID</strong>
                             </h4>
-                            <input
-                                type="text"
-                                aria-describedby="searchHelp"
-                                className="form-control"
-                                placeholder="Search for an issue."
-                            />
+
+                            <div class="input-group mb-3">
+                                <input
+                                    type="text"
+                                    aria-describedby="searchHelp"
+                                    className="form-control"
+                                    placeholder="Search for an issue."
+                                />
+                                <div class="input-group-append">
+                                    <button
+                                        class="btn btn-outline-secondary"
+                                        type="button"
+                                        id="searchHelp"
+                                    >
+                                        <i className="fas fa-search" />
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </form>
                     <div className="row">
