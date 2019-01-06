@@ -6,7 +6,7 @@ class Landing extends Component {
             <main role="main" className="flex-fill">
                 <div className="container">
                     <p className="mt-5">
-                        <span className="h1">Bugtracker </span>
+                        <span className="h1">Pesticide </span>
                         <span className="h5 text-muted">Issues</span>
                         <hr />
                     </p>

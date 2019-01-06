@@ -1,5 +1,5 @@
 {
-    "name": "bugtracker",
+    "name": "pesticide",
     "version": "1.0.0",
     "description": "",
     "main": "server.js",
@@ -11,14 +11,14 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/AverageDemo/bugtracker.git"
+        "url": "git+https://github.com/AverageDemo/Pesticide.git"
     },
     "author": "AverageDemo",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/AverageDemo/bugtracker/issues"
+        "url": "https://github.com/AverageDemo/Pesticide/issues"
     },
-    "homepage": "https://github.com/AverageDemo/bugtracker#readme",
+    "homepage": "https://github.com/AverageDemo/Pesticide/#readme",
     "dependencies": {
         "bcryptjs": "^2.4.3",
         "body-parser": "^1.18.3",

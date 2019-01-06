@@ -5,7 +5,7 @@ export default function Footer() {
     return (
         <footer className="mt-auto py-1">
             <div className="container">
-                Copyright &copy;{new Date().getFullYear()} Bugtracker
+                Copyright &copy;{new Date().getFullYear()} Pesticide
                 <ul className="float-right list-inline mb-0">
                     <li className="list-inline-item">
                         <Link className="footerItem" to="#">

@@ -7,7 +7,7 @@ class Navbar extends Component {
             <nav className="navbar navbar-expand-md navbar-dark bg-color mb-3">
                 <Link className="navbar-brand" to="/">
                     <i className="fas fa-bug mr-2" />
-                    Bugtracker
+                    Pesticide
                 </Link>
                 <button
                     className="navbar-toggler"
