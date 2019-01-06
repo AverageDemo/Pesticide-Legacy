@@ -94,7 +94,7 @@ router.post("/login", (req, res) => {
                     if (user.isVerified) {
                         const payload = {
                             id: user.id,
-                            name: user.name
+                            username: user.username
                         };
 
                         jwt.sign(payload, keys.secretOrKey, { expiresIn: 3600 }, (err, token) => {
