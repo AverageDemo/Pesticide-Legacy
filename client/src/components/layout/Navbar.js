@@ -5,10 +5,10 @@ class Navbar extends Component {
     render() {
         return (
             <nav className="navbar navbar-expand-md navbar-dark bg-color mb-3">
-                <a className="navbar-brand" href="#">
+                <Link className="navbar-brand" to="/">
                     <i className="fas fa-bug mr-2" />
                     Bugtracker
-                </a>
+                </Link>
                 <button
                     className="navbar-toggler"
                     type="button"
@@ -23,26 +23,26 @@ class Navbar extends Component {
                 <div className="collapse navbar-collapse" id="navbarCollapse">
                     <ul className="navbar-nav mr-auto">
                         <li className="nav-item active">
-                            <a className="nav-link" href="#">
+                            <Link className="nav-link" to="/">
                                 Home <span className="sr-only">(current)</span>
-                            </a>
+                            </Link>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href="#">
+                            <Link className="nav-link" to="#">
                                 Search
-                            </a>
+                            </Link>
                         </li>
                     </ul>
                     <ul className="navbar-nav ml-auto">
                         <li className="nav-item">
-                            <a className="nav-link" href="#">
+                            <Link className="nav-link" to="/register">
                                 Sign Up
-                            </a>
+                            </Link>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href="#">
+                            <Link className="nav-link" to="/login">
                                 Login
-                            </a>
+                            </Link>
                         </li>
                     </ul>
                 </div>

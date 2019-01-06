@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function Footer() {
     return (
@@ -7,14 +8,14 @@ export default function Footer() {
                 Copyright &copy;{new Date().getFullYear()} Bugtracker
                 <ul className="float-right list-inline mb-0">
                     <li className="list-inline-item">
-                        <a className="footerItem" href="#">
+                        <Link className="footerItem" to="#">
                             About
-                        </a>
+                        </Link>
                     </li>
                     <li className="list-inline-item">
-                        <a className="footerItem" href="#">
+                        <Link className="footerItem" to="#">
                             Terms of Service
-                        </a>
+                        </Link>
                     </li>
                 </ul>
             </div>
