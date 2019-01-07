@@ -18,6 +18,10 @@ const IssueSchema = new Schema({
         type: String,
         required: false
     },
+    stackTrace: {
+        type: String,
+        required: false
+    },
     category: {
         type: Schema.Types.ObjectId,
         ref: "categories"

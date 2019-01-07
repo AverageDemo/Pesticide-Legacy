@@ -16,6 +16,7 @@ import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 
 import NewIssue from "./components/issues/NewIssue";
+import ViewIssue from "./components/issues/ViewIssue";
 
 import "./App.css";
 
@@ -44,6 +45,7 @@ class App extends Component {
                                 <Route exact path="/register" component={Register} />
                                 <Route exact path="/login" component={Login} />
                                 <Route exact path="/newIssue" component={NewIssue} />
+                                <Route exact path="/:issueTag" component={ViewIssue} />
                                 <Route component={NoMatch} />
                             </Switch>
                             <Footer />

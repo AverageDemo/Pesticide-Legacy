@@ -11,6 +11,7 @@ class NewIssue extends Component {
             name: "",
             description: "",
             reproduction: "",
+            stackTrace: "",
             category: "",
             errors: {}
         };
@@ -35,6 +36,7 @@ class NewIssue extends Component {
             name: this.state.name,
             description: this.state.description,
             reproduction: this.state.reproduction,
+            stackTrace: this.state.stackTrace,
             category: this.state.category
         };
 
@@ -100,6 +102,23 @@ class NewIssue extends Component {
                                         <div className="invalid-feedback">
                                             {errors.reproduction}
                                         </div>
+                                    )}
+                                </div>
+                                <div className="form-group">
+                                    <textarea
+                                        type="text"
+                                        className={classnames("form-control form-control-lg", {
+                                            "is-invalid": errors.stackTrace
+                                        })}
+                                        placeholder="Stacktrace"
+                                        name="stackTrace"
+                                        value={this.state.stackTrace}
+                                        onChange={this.onChange}
+                                    >
+                                        {" "}
+                                    </textarea>
+                                    {errors.stackTrace && (
+                                        <div className="invalid-feedback">{errors.stackTrace}</div>
                                     )}
                                 </div>
                                 <div className="form-group">

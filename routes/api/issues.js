@@ -21,6 +21,7 @@ router.get("/", (req, res) => {
     const errors = {};
 
     Issue.find()
+        .sort({ _id: -1 })
         .populate("category", ["name"])
         .then(issues => res.json(issues))
         .catch(err => res.status(400).json(err));
@@ -44,6 +45,7 @@ router.post("/newIssue", passport.authenticate("jwt", { session: false }), (req,
                 tag: `${keys.issuePrefix}${count}`,
                 description: req.body.description,
                 reproduction: req.body.reproduction,
+                stackTrace: req.body.stackTrace,
                 category: req.body.category
             });
 
@@ -62,6 +64,8 @@ router.post("/newIssue", passport.authenticate("jwt", { session: false }), (req,
  */
 
 router.get("/:issueTag", (req, res) => {
+    const { errors } = {};
+
     Issue.findOne({ tag: { $regex: new RegExp("^" + req.params.issueTag + "$", "i") } })
         .then(issue => {
             if (!issue) {
@@ -71,7 +75,7 @@ router.get("/:issueTag", (req, res) => {
 
             res.json(issue);
         })
-        .catch(err => console.log(err));
+        .catch(err => res.status(400).json({ error: "Invalid issue!" }));
 });
 
 /*

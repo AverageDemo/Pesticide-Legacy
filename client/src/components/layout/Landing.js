@@ -43,6 +43,7 @@ class Landing extends Component {
                     {issues
                         .filter(issue => issue.isResolved && !issue.isPrivate)
                         .slice(0, 4)
+                        // eslint-disable-next-line
                         .map(issue => {
                             if (!issue.isPrivate && issue.isResolved) {
                                 return (
