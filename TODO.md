@@ -4,12 +4,12 @@ Some things I have to fix / add:
 
 ADD:
 
-Solving issues
-2FA
-OAuth
-Developer status (already a things but has no functionality specific to it)
-Administrator panel and settings
-Ability to customize site title and various other things
+Solving issues<br />
+2FA<br />
+OAuth<br />
+Developer status (already a things but has no functionality specific to it)<br />
+Administrator panel and settings<br />
+Ability to customize site title and various other things<br />
 
 FIX:
 
