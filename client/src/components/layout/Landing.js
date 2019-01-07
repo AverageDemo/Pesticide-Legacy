@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { getHomeIssues } from "../../actions/issueActions";
 
 class Landing extends Component {
-    componentWillMount() {
+    componentDidMount() {
         this.props.getHomeIssues();
     }
 

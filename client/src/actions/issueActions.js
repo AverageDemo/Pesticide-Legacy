@@ -22,5 +22,5 @@ export const getIssue = (issueTag, history) => dispatch => {
     axios
         .get(`/api/issues/${issueTag}`)
         .then(res => dispatch({ type: GET_ISSUE, payload: res.data }))
-        .catch(err => history.push("/"));
+        .catch(err => history.push("/not-found"));
 };

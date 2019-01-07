@@ -45,8 +45,8 @@ class App extends Component {
                                 <Route exact path="/register" component={Register} />
                                 <Route exact path="/login" component={Login} />
                                 <Route exact path="/newIssue" component={NewIssue} />
+                                <Route exact path="/not-found" component={NoMatch} />
                                 <Route exact path="/:issueTag" component={ViewIssue} />
-                                <Route component={NoMatch} />
                             </Switch>
                             <Footer />
                         </div>

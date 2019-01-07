@@ -17,7 +17,7 @@ class ViewIssue extends Component {
         nextProps.errors && this.setState({ errors: nextProps.errors });
     }
 
-    componentWillMount() {
+    componentDidMount() {
         const { issueTag } = this.props.match.params;
         this.props.getIssue(issueTag, this.props.history);
     }

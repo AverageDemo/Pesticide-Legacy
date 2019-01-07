@@ -14,7 +14,6 @@ export default function(state = initialState, action) {
             };
         case GET_ISSUE:
             return {
-                ...state,
                 issue: action.payload
             };
         default:
