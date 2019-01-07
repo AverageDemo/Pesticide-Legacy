@@ -13,12 +13,17 @@ const validateNewCategoryInput = require("../../validation/newcategory");
 
 /*
  * @route   GET api/issues
- * @desc    View all issues
+ * @desc    Get all unresolved public issues
  * @access  Public
  */
 
 router.get("/", (req, res) => {
-    res.json({ msg: "k" });
+    const errors = {};
+
+    Issue.find({ isResolved: false, isPrivate: false })
+        .populate("category", ["name"])
+        .then(issues => res.json(issues))
+        .catch(err => res.status(400).json(err));
 });
 
 /*

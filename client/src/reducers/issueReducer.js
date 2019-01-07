@@ -1,13 +1,18 @@
 import isEmpty from "../validation/is-empty";
 
-import { SET_NEW_ISSUE } from "../actions/types";
+import { GET_NEW_ISSUES } from "../actions/types";
 
 const initialState = {
-    issue: {}
+    issues: null
 };
 
 export default function(state = initialState, action) {
     switch (action.type) {
+        case GET_NEW_ISSUES:
+            return {
+                ...state,
+                issues: action.payload
+            };
         default:
             return state;
     }
