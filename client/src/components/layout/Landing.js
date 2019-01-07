@@ -10,24 +10,54 @@ class Landing extends Component {
 
     render() {
         const { issues } = this.props.issues;
-        let displayIssues;
+        let displayOpenIssues;
+        let displayClosedIssues;
 
         if (issues) {
-            displayIssues = (
+            displayOpenIssues = (
                 <div>
-                    {issues.map(issue => {
-                        return (
-                            <li className="list-group-item">
-                                <h4>{issue.name}</h4>
-                                <cite>{issue.category.name}</cite>
-                                <p>{issue.description}</p>
-                            </li>
-                        );
-                    })}
+                    {issues
+                        .filter(issue => !issue.isResolved && !issue.isPrivate)
+                        .slice(0, 4)
+                        .map(issue => {
+                            return (
+                                <li className="list-group-item">
+                                    <h4 className="issueTitle">{issue.name}</h4>
+                                    <cite className="m-0 text-muted">{issue.category.name}</cite>
+                                    <p className="issueDescription text-muted">
+                                        {issue.description.substr(0, 128)}...
+                                    </p>
+                                </li>
+                            );
+                        })}
+                </div>
+            );
+
+            displayClosedIssues = (
+                <div>
+                    {issues
+                        .filter(issue => issue.isResolved && !issue.isPrivate)
+                        .slice(0, 4)
+                        .map(issue => {
+                            if (!issue.isPrivate && issue.isResolved) {
+                                return (
+                                    <li className="list-group-item">
+                                        <h4 className="issueTitle">{issue.name}</h4>
+                                        <cite className="m-0 text-muted">
+                                            {issue.category.name}
+                                        </cite>
+                                        <p className="issueDescription text-muted">
+                                            {issue.description.substr(0, 128)}...
+                                        </p>
+                                    </li>
+                                );
+                            }
+                        })}
                 </div>
             );
         } else {
-            displayIssues = <div className="ml-2">Loading</div>;
+            displayOpenIssues = <div className="ml-2">Loading</div>;
+            displayClosedIssues = <div className="ml-2">Loading</div>;
         }
 
         return (
@@ -69,7 +99,7 @@ class Landing extends Component {
                                 <div className="card-header">
                                     <i className="fas fa-bug mr-1" /> Recent Issues
                                 </div>
-                                <ul className="list-group list-group-flush">{displayIssues}</ul>
+                                <ul className="list-group list-group-flush">{displayOpenIssues}</ul>
                             </div>
                         </div>
 
@@ -79,11 +109,7 @@ class Landing extends Component {
                                     <i className="fas fa-check mr-1" /> Recently Closed Issues
                                 </div>
                                 <ul className="list-group list-group-flush">
-                                    <li className="list-group-item">
-                                        <h4>Issue Title</h4>
-                                        <cite>Issue Category</cite>
-                                        <p>Issue Description</p>
-                                    </li>
+                                    {displayClosedIssues}
                                 </ul>
                             </div>
                         </div>

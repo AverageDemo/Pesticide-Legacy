@@ -20,7 +20,7 @@ const validateNewCategoryInput = require("../../validation/newcategory");
 router.get("/", (req, res) => {
     const errors = {};
 
-    Issue.find({ isResolved: false, isPrivate: false })
+    Issue.find()
         .populate("category", ["name"])
         .then(issues => res.json(issues))
         .catch(err => res.status(400).json(err));
