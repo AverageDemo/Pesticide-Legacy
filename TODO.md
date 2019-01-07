@@ -10,7 +10,7 @@ OAuth<br />
 Developer status (already a things but has no functionality specific to it)<br />
 Administrator panel and settings<br />
 Ability to customize site title and various other things<br />
-Possibly adding dev-groups so only certain groups can view certain issues<br />
+Dev-groups so only certain groups can view certain issues<br />
 
 FIX:
 
