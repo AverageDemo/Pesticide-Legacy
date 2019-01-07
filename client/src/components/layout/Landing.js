@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { getHomeIssues } from "../../actions/issueActions";
@@ -22,7 +23,11 @@ class Landing extends Component {
                         .map(issue => {
                             return (
                                 <li className="list-group-item">
-                                    <h4 className="issueTitle">{issue.name}</h4>
+                                    <h4>
+                                        <Link className="issueTitle" to={issue.tag}>
+                                            {issue.name}
+                                        </Link>
+                                    </h4>
                                     <cite className="m-0 text-muted">{issue.category.name}</cite>
                                     <p className="issueDescription text-muted">
                                         {issue.description.substr(0, 128)}...
@@ -42,7 +47,11 @@ class Landing extends Component {
                             if (!issue.isPrivate && issue.isResolved) {
                                 return (
                                     <li className="list-group-item">
-                                        <h4 className="issueTitle">{issue.name}</h4>
+                                        <h4>
+                                            <Link className="issueTitle" to={issue.tag}>
+                                                {issue.name}
+                                            </Link>
+                                        </h4>
                                         <cite className="m-0 text-muted">
                                             {issue.category.name}
                                         </cite>
