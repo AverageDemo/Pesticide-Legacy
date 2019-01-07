@@ -105,7 +105,7 @@ class Landing extends Component {
                     </form>
                     <div className="row">
                         <div className="col-xs-12 col-md-6">
-                            <div className="card bg-danger">
+                            <div className="card alert-danger">
                                 <div className="card-header">
                                     <i className="fas fa-bug mr-1" /> Recent Issues
                                 </div>
@@ -114,7 +114,7 @@ class Landing extends Component {
                         </div>
 
                         <div className="col-xs-12 col-md-6">
-                            <div className="card bg-success">
+                            <div className="card alert-success">
                                 <div className="card-header">
                                     <i className="fas fa-check mr-1" /> Recently Closed Issues
                                 </div>

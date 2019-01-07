@@ -67,6 +67,7 @@ router.get("/:issueTag", (req, res) => {
     const { errors } = {};
 
     Issue.findOne({ tag: { $regex: new RegExp("^" + req.params.issueTag + "$", "i") } })
+        .populate("category", ["name"])
         .then(issue => {
             if (!issue) {
                 errors.issue = "Issue not found!";

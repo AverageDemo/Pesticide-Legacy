@@ -16,17 +16,11 @@ footer {
 h4 > strong {
     color: #2a2a2a;
 }
-.bg-danger {
-    background-color: #f2dede !important;
+.alert-danger > .card-header {
+    color: #d9544fe1;
 }
-.bg-success {
-    background-color: #dbf5d3 !important;
-}
-.bg-danger > .card-header {
-    color: #d9534f;
-}
-.bg-success > .card-header {
-    color: #569845;
+.alert-success > .card-header {
+    color: #569845e7;
 }
 .footerItem {
     color: inherit;
@@ -49,4 +43,18 @@ h4 > strong {
 .issueDescription {
     font-size: 14px;
     margin: 0;
+}
+.issueTag {
+    margin-top: 75px;
+    margin-bottom: 20px;
+    font-weight: normal;
+}
+.status {
+    font-size: 24px;
+    color: #fff;
+}
+.tableHeader {
+    font-size: 14px;
+    width: 175px;
+    background-color: #eee;
 }
