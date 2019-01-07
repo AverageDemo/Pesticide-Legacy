@@ -16,4 +16,4 @@ FIX:
 
 The re-rendering and pre-fetching of data
 
--   This will fix old issues showing for a moment on a new page as well as the loading of the home page - This will likely be done by querying the store for a specific article rather than the database. As for the home page there will be a proper loading <word here> implemented
+-   This will fix old issues showing for a moment on a new page as well as the loading of the home page - This will likely be done by querying the store for a specific article rather than the database. As for the home page there will be a proper loading _thing_ implemented
