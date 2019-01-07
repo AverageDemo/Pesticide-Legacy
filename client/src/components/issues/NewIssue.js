@@ -21,7 +21,6 @@ class NewIssue extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        //nextProps.auth.isAuthenticated && this.props.history.push("/");
         nextProps.errors && this.setState({ errors: nextProps.errors });
     }
 
