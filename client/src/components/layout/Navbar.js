@@ -25,9 +25,9 @@ class Navbar extends Component {
                     {user.username}
                 </a>
                 <div className="dropdown-menu dropdown-menu-right">
-                    <a href="#" className="dropdown-item">
+                    <Link className="dropdown-item" to="/newIssue">
                         New Issue
-                    </a>
+                    </Link>
                     <a href="#" className="dropdown-item" onClick={this.onLogoutClick.bind(this)}>
                         Logout
                     </a>

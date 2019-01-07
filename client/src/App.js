@@ -13,6 +13,8 @@ import Landing from "./components/layout/Landing";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 
+import NewIssue from "./components/issues/NewIssue";
+
 import "./App.css";
 
 if (localStorage.jwtToken) {
@@ -38,6 +40,7 @@ class App extends Component {
                             <Route exact path="/" component={Landing} />
                             <Route exact path="/register" component={Register} />
                             <Route exact path="/login" component={Login} />
+                            <Route exact path="/newIssue" component={NewIssue} />
                             <Footer />
                         </div>
                     </div>
