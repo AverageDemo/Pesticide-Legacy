@@ -6,29 +6,10 @@ import { connect } from "react-redux";
 import { getIssue } from "../../actions/issueActions";
 
 class ViewIssue extends Component {
-    constructor() {
-        super();
-        this.state = {
-            errors: {}
-        };
-    }
-
-    componentWillReceiveProps(nextProps) {
-        nextProps.errors && this.setState({ errors: nextProps.errors });
-    }
-
-    componentDidMount() {
+    componentWillMount() {
         const { issueTag } = this.props.match.params;
         this.props.getIssue(issueTag, this.props.history);
     }
-
-    onChange = e => {
-        this.setState({ [e.target.name]: e.target.value });
-    };
-
-    onSubmit = e => {
-        e.preventDefault();
-    };
 
     render() {
         const { issue } = this.props.issue;
@@ -149,14 +130,12 @@ class ViewIssue extends Component {
 ViewIssue.propTypes = {
     getIssue: PropTypes.func.isRequired,
     issue: PropTypes.object.isRequired,
-    auth: PropTypes.object.isRequired,
-    errors: PropTypes.object.isRequired
+    auth: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
     issue: state.issues,
-    auth: state.auth,
-    errors: state.errors
+    auth: state.auth
 });
 
 export default connect(
