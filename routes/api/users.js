@@ -135,4 +135,13 @@ router.get("/activate/:token", (req, res) => {
         .catch(err => console.log(err));
 });
 
+/*
+ * @route   GET api/users/iselevated
+ * @desc    Checks if a user has elevated permissions
+ * @access  Private
+ */
+router.get("/iselevated", passport.authenticate("jwt", { session: false }), (req, res) => {
+    return req.user.isAdmin || req.user.isDeveloper ? res.json(true) : res.json(false);
+});
+
 module.exports = router;

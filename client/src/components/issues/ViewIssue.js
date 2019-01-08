@@ -3,20 +3,52 @@ import moment from "moment";
 import PropTypes from "prop-types";
 import classnames from "classnames";
 import { connect } from "react-redux";
-import { getIssue } from "../../actions/issueActions";
+import { getIssue, solveIssue } from "../../actions/issueActions";
+import { getPermissions } from "../../actions/authActions";
 
 class ViewIssue extends Component {
+    constructor() {
+        super();
+        this.state = {
+            devNotes: "",
+            errors: {}
+        };
+    }
+
     componentWillMount() {
         const { issueTag } = this.props.match.params;
         this.props.getIssue(issueTag, this.props.history);
+        this.props.getPermissions(this.props.auth.user.id);
     }
+
+    componentWillReceiveProps(nextProps) {
+        nextProps.errors && this.setState({ errors: nextProps.errors });
+    }
+
+    onChange = e => {
+        this.setState({ [e.target.name]: e.target.value });
+    };
+
+    onSubmit = e => {
+        e.preventDefault();
+
+        const { issue } = this.props.issue;
+
+        const issueData = {
+            devNotes: this.state.devNotes
+        };
+
+        this.props.solveIssue(issue.tag, this.props.history, issueData);
+    };
 
     render() {
         const { issue } = this.props.issue;
+        const { permissions } = this.props.auth;
+        const { errors } = this.state;
         let issueDisplay;
 
         if (issue) {
-            let reproduction, stackTrace;
+            let reproduction, stackTrace, devNotes;
 
             if (issue.reproduction) {
                 reproduction = (
@@ -40,6 +72,46 @@ class ViewIssue extends Component {
                 );
             }
 
+            if (issue.isResolved && issue.devNotes) {
+                devNotes = (
+                    <div className="card">
+                        <div className="card-header">Developer Notes</div>
+                        <div className="card-body">
+                            <p className="card-text">{issue.devNotes}</p>
+                        </div>
+                    </div>
+                );
+            }
+
+            if (!issue.isResolved && permissions) {
+                devNotes = (
+                    <form onSubmit={this.onSubmit}>
+                        <div className="form-group">
+                            <textarea
+                                type="text"
+                                className={classnames("form-control form-control-lg", {
+                                    "is-invalid": errors.description
+                                })}
+                                placeholder="Developer Notes"
+                                name="devNotes"
+                                value={this.state.devNotes}
+                                onChange={this.onChange}
+                            >
+                                {" "}
+                            </textarea>
+                            {errors.description && (
+                                <div className="invalid-feedback">{errors.description}</div>
+                            )}
+                        </div>
+                        <input
+                            value="Close Issue"
+                            type="submit"
+                            className="btn btn-success btn-lg btn-block"
+                        />
+                    </form>
+                );
+            }
+
             issueDisplay = (
                 <div>
                     <h5 className="text-muted issueTag">{issue.tag}</h5>
@@ -47,6 +119,8 @@ class ViewIssue extends Component {
                     <hr />
                     <div className="row">
                         <div className="col-xs-12 col-md-8">
+                            {devNotes}
+                            <br />
                             <div className="card">
                                 <div className="card-header">Description</div>
                                 <div className="card-body">
@@ -129,16 +203,21 @@ class ViewIssue extends Component {
 
 ViewIssue.propTypes = {
     getIssue: PropTypes.func.isRequired,
+    solveIssue: PropTypes.func.isRequired,
+    getPermissions: PropTypes.func.isRequired,
     issue: PropTypes.object.isRequired,
-    auth: PropTypes.object.isRequired
+    auth: PropTypes.object.isRequired,
+    errors: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
+    permissions: state.permissions,
     issue: state.issues,
-    auth: state.auth
+    auth: state.auth,
+    errors: state.errors
 });
 
 export default connect(
     mapStateToProps,
-    { getIssue }
+    { getIssue, getPermissions, solveIssue }
 )(ViewIssue);

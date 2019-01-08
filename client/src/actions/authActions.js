@@ -2,7 +2,7 @@ import axios from "axios";
 import jwt_decode from "jwt-decode";
 import setAuthToken from "../utils/setAuthToken";
 
-import { GET_ERRORS, SET_CURRENT_USER } from "./types";
+import { GET_ERRORS, SET_CURRENT_USER, GET_PERMISSIONS } from "./types";
 
 // User registration
 export const registerUser = (userData, history) => dispatch => {
@@ -37,4 +37,11 @@ export const setCurrentUser = decoded => {
         type: SET_CURRENT_USER,
         payload: decoded
     };
+};
+
+export const getPermissions = userID => dispatch => {
+    axios
+        .get(`/api/users/iselevated`)
+        .then(res => dispatch({ type: GET_PERMISSIONS, payload: res.data }))
+        .catch(err => dispatch({ type: GET_PERMISSIONS, payload: {} }));
 };

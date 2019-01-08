@@ -167,7 +167,13 @@ router.post("/:issueTag/close", passport.authenticate("jwt", { session: false })
 
             Issue.findOneAndUpdate(
                 { tag: { $regex: new RegExp("^" + req.params.issueTag + "$", "i") } },
-                { $set: { isResolved: true, devNotes: req.body.value, dateResolved: Date.now() } }
+                {
+                    $set: {
+                        isResolved: true,
+                        devNotes: req.body.devNotes,
+                        dateUpdated: Date.now()
+                    }
+                }
             )
                 .then(issue => {
                     res.json(issue);

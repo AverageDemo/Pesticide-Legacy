@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { GET_ERRORS, GET_NEW_ISSUES, GET_ISSUE } from "./types";
+import { GET_ERRORS, GET_NEW_ISSUES, GET_ISSUE, CLOSE_ISSUE } from "./types";
 
 export const newIssue = (issueData, history) => dispatch => {
     axios
@@ -23,4 +23,11 @@ export const getIssue = (issueTag, history) => dispatch => {
         .get(`/api/issues/${issueTag}`)
         .then(res => dispatch({ type: GET_ISSUE, payload: res.data }))
         .catch(err => history.push("/not-found"));
+};
+
+export const solveIssue = (issueTag, history, issueData) => dispatch => {
+    axios
+        .post(`/api/issues/${issueTag}/close`, issueData)
+        .then(res => history.go(0))
+        .catch(err => console.log(err));
 };
