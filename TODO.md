@@ -4,14 +4,16 @@ Some things I have to fix / add:
 
 ADD:
 
-Solving issues<br />
+Private issues<br />
 2FA<br />
 OAuth<br />
+GitHub / SVN / Perforce Integration<br />
 Developer status (already a things but has no functionality specific to it)<br />
 Administrator panel and settings<br />
 Ability to customize site title and various other things<br />
 Dev-groups so only certain groups can view certain issues<br />
 Search features<br />
+Comments<br />
 
 FIX:
 
