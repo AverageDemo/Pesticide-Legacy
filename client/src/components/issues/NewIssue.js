@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import classnames from "classnames";
 import { connect } from "react-redux";
 import { newIssue } from "../../actions/issueActions";
+import { getCategories } from "../../actions/categoryActions";
 
 class NewIssue extends Component {
     constructor() {
@@ -16,6 +17,10 @@ class NewIssue extends Component {
             isPrivate: false,
             errors: {}
         };
+    }
+
+    componentWillMount() {
+        this.props.getCategories();
     }
 
     componentDidMount() {
@@ -47,6 +52,29 @@ class NewIssue extends Component {
 
     render() {
         const { errors } = this.state;
+        const { categories } = this.props.categories;
+        let populateSelect;
+
+        if (categories) {
+            populateSelect = (
+                <div className="form-group">
+                    <select
+                        class="form-control form-control-lg"
+                        value={this.state.category}
+                        onChange={this.onChange}
+                        className={classnames("form-control form-control-lg", {
+                            "is-invalid": errors.category
+                        })}
+                        name="category"
+                    >
+                        {categories.map(category => {
+                            return <option value={category._id}>{category.name}</option>;
+                        })}
+                    </select>
+                    {errors.category && <div className="invalid-feedback">{errors.category}</div>}
+                </div>
+            );
+        }
 
         return (
             <div className="login flex-fill">
@@ -123,21 +151,7 @@ class NewIssue extends Component {
                                         <div className="invalid-feedback">{errors.stackTrace}</div>
                                     )}
                                 </div>
-                                <div className="form-group">
-                                    <input
-                                        type="text"
-                                        className={classnames("form-control form-control-lg", {
-                                            "is-invalid": errors.category
-                                        })}
-                                        placeholder="Category"
-                                        name="category"
-                                        value={this.state.category}
-                                        onChange={this.onChange}
-                                    />
-                                    {errors.category && (
-                                        <div className="invalid-feedback">{errors.category}</div>
-                                    )}
-                                </div>
+                                {populateSelect}
                                 <div className="form-group">
                                     <input
                                         type="checkbox"
@@ -159,17 +173,20 @@ class NewIssue extends Component {
 }
 
 NewIssue.propTypes = {
+    getCategories: PropTypes.func.isRequired,
     newIssue: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired,
-    errors: PropTypes.object.isRequired
+    errors: PropTypes.object.isRequired,
+    categories: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
     auth: state.auth,
-    errors: state.errors
+    errors: state.errors,
+    categories: state.categories
 });
 
 export default connect(
     mapStateToProps,
-    { newIssue }
+    { newIssue, getCategories }
 )(NewIssue);

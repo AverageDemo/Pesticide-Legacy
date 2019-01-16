@@ -59,12 +59,12 @@ router.post("/newIssue", passport.authenticate("jwt", { session: false }), (req,
 });
 
 /*
- * @route   GET api/issues/:issueTag
+ * @route   GET api/issues/v/:issueTag
  * @desc    View an issue
  * @access  Public
  */
 
-router.get("/:issueTag", (req, res) => {
+router.get("/v/:issueTag", (req, res) => {
     const { errors } = {};
 
     Issue.findOne({ tag: { $regex: new RegExp("^" + req.params.issueTag + "$", "i") } })
@@ -118,50 +118,54 @@ router.post("/newCategory", passport.authenticate("jwt", { session: false }), (r
 });
 
 /*
- * @route   POST api/issues/:issueTag/comment
+ * @route   POST api/issues/v/:issueTag/comment
  * @desc    Add a new comment to an issue
  * @access  Private
  */
 
-router.post("/:issueTag/comment", passport.authenticate("jwt", { session: false }), (req, res) => {
-    const { errors, isValid } = validateNewCommentInput(req.body);
+router.post(
+    "/v/:issueTag/comment",
+    passport.authenticate("jwt", { session: false }),
+    (req, res) => {
+        const { errors, isValid } = validateNewCommentInput(req.body);
 
-    if (!isValid) return res.status(400).json(errors);
+        if (!isValid) return res.status(400).json(errors);
 
-    Issue.findOne({ tag: { $regex: new RegExp("^" + req.params.issueTag + "$", "i") } })
-        .then(issue => {
-            if (!issue) {
-                errors.issue = "Issue not found!";
-                return res.status(404).json(errors);
-            }
+        Issue.findOne({ tag: { $regex: new RegExp("^" + req.params.issueTag + "$", "i") } })
+            .then(issue => {
+                if (!issue) {
+                    errors.issue = "Issue not found!";
+                    return res.status(404).json(errors);
+                }
 
-            if (issue.isResolved) {
-                errors.issue = "This issue is closed!";
-                return res.status(400).json(errors);
-            }
+                if (issue.isResolved) {
+                    errors.issue = "This issue is closed!";
+                    return res.status(400).json(errors);
+                }
 
-            const newComment = {
-                value: req.body.comment,
-                author: req.user.id
-            };
+                const newComment = {
+                    value: req.body.comment,
+                    author: req.user.id
+                };
 
-            issue.comments.unshift(newComment);
+                issue.comments.unshift(newComment);
 
-            issue
-                .save()
-                .then(issue => res.json(issue))
-                .catch(err => console.log(err));
-        })
-        .catch(err => console.log(err));
-});
+                issue
+                    .save()
+                    .then(issue => res.json(issue))
+                    .catch(err => console.log(err));
+            })
+            .catch(err => console.log(err));
+    }
+);
 
 /*
- * @route   POST api/issues/:issueTag/close
+ * @route   POST api/issues/v/:issueTag/close
  * @desc    Mark an issue as solved
  * @access  Private / admin / developer
  */
 
-router.post("/:issueTag/close", passport.authenticate("jwt", { session: false }), (req, res) => {
+router.post("/v/:issueTag/close", passport.authenticate("jwt", { session: false }), (req, res) => {
     User.findById(req.user.id)
         .then(user => {
             if (!user.isAdmin && !user.isDeveloper)
@@ -182,6 +186,18 @@ router.post("/:issueTag/close", passport.authenticate("jwt", { session: false })
                 })
                 .catch(err => console.log(err));
         })
+        .catch(err => console.log(err));
+});
+
+/*
+ * @route   GET api/issues/getCategories
+ * @desc    Returns all categories
+ * @access  Private
+ */
+
+router.get("/getCategories", passport.authenticate("jwt", { session: false }), (req, res) => {
+    Category.find()
+        .then(categories => res.json(categories))
         .catch(err => console.log(err));
 });
 
