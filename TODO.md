@@ -4,6 +4,7 @@ Some things I have to fix / add:
 
 ADD:
 
+Dropdown to select a category<br />
 2FA<br />
 OAuth<br />
 GitHub / SVN / Perforce Integration<br />
