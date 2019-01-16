@@ -46,7 +46,8 @@ router.post("/newIssue", passport.authenticate("jwt", { session: false }), (req,
                 description: req.body.description,
                 reproduction: req.body.reproduction,
                 stackTrace: req.body.stackTrace,
-                category: req.body.category
+                category: req.body.category,
+                isPrivate: req.body.isPrivate
             });
 
             newIssue
@@ -140,7 +141,7 @@ router.post("/:issueTag/comment", passport.authenticate("jwt", { session: false 
             }
 
             const newComment = {
-                value: req.body.value,
+                value: req.body.comment,
                 author: req.user.id
             };
 

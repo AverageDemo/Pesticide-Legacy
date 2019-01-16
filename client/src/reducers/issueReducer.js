@@ -1,4 +1,4 @@
-import { GET_NEW_ISSUES, GET_ISSUE, CLOSE_ISSUE } from "../actions/types";
+import { GET_NEW_ISSUES, GET_ISSUE } from "../actions/types";
 
 const initialState = {
     issues: null,
@@ -13,11 +13,6 @@ export default function(state = initialState, action) {
                 issues: action.payload
             };
         case GET_ISSUE:
-            return {
-                ...state,
-                issue: action.payload
-            };
-        case CLOSE_ISSUE:
             return {
                 ...state,
                 issue: action.payload

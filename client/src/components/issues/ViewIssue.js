@@ -3,7 +3,7 @@ import moment from "moment";
 import PropTypes from "prop-types";
 import classnames from "classnames";
 import { connect } from "react-redux";
-import { getIssue, solveIssue } from "../../actions/issueActions";
+import { getIssue, solveIssue, newComment } from "../../actions/issueActions";
 import { getPermissions } from "../../actions/authActions";
 
 class ViewIssue extends Component {
@@ -11,6 +11,7 @@ class ViewIssue extends Component {
         super();
         this.state = {
             devNotes: "",
+            comment: "",
             errors: {}
         };
     }
@@ -29,7 +30,7 @@ class ViewIssue extends Component {
         this.setState({ [e.target.name]: e.target.value });
     };
 
-    onSubmit = e => {
+    onSubmitClose = e => {
         e.preventDefault();
 
         const { issue } = this.props.issue;
@@ -41,6 +42,18 @@ class ViewIssue extends Component {
         this.props.solveIssue(issue.tag, this.props.history, issueData);
     };
 
+    onSubmitComment = e => {
+        e.preventDefault();
+
+        const { issue } = this.props.issue;
+
+        const comment = {
+            comment: this.state.comment
+        };
+
+        this.props.newComment(issue.tag, this.props.history, comment);
+    };
+
     render() {
         const { issue } = this.props.issue;
         const { permissions } = this.props.auth;
@@ -48,7 +61,7 @@ class ViewIssue extends Component {
         let issueDisplay;
 
         if (issue) {
-            let reproduction, stackTrace, devNotes, comments;
+            let reproduction, stackTrace, devNotes;
 
             if (issue.reproduction) {
                 reproduction = (
@@ -83,28 +96,9 @@ class ViewIssue extends Component {
                 );
             }
 
-            if (issue.comments) {
-                comments = (
-                    <div className="card">
-                        <div className="card-header">Comments</div>
-                        <ul class="list-group list-group-flush">
-                            {issue.comments.map(comment => {
-                                return (
-                                    <li class="list-group-item">
-                                        {comment.value}
-                                        <br />
-                                        <p className="text-muted">- {comment.author.username}</p>
-                                    </li>
-                                );
-                            })}
-                        </ul>
-                    </div>
-                );
-            }
-
             if (!issue.isResolved && permissions) {
                 devNotes = (
-                    <form onSubmit={this.onSubmit}>
+                    <form onSubmit={this.onSubmitClose}>
                         <div className="form-group">
                             <textarea
                                 type="text"
@@ -131,6 +125,35 @@ class ViewIssue extends Component {
                 );
             }
 
+            const newComment = (
+                <li class="list-group-item">
+                    <form onSubmit={this.onSubmitComment}>
+                        <div className="form-group">
+                            <textarea
+                                type="text"
+                                className={classnames("form-control form-control-lg", {
+                                    "is-invalid": errors.comment
+                                })}
+                                placeholder="Comment"
+                                name="comment"
+                                value={this.state.comment}
+                                onChange={this.onChange}
+                            >
+                                {" "}
+                            </textarea>
+                            {errors.comment && (
+                                <div className="invalid-feedback">{errors.comment}</div>
+                            )}
+                        </div>
+                        <input
+                            value="Submit Comment"
+                            type="submit"
+                            className="btn btn-success btn-lg btn-block"
+                        />
+                    </form>
+                </li>
+            );
+
             issueDisplay = (
                 <div>
                     <h5 className="text-muted issueTag">{issue.tag}</h5>
@@ -151,7 +174,23 @@ class ViewIssue extends Component {
                             <br />
                             {issue.stackTrace && stackTrace}
                             <br />
-                            {issue.comments && comments}
+                            <div className="card">
+                                <div className="card-header">Comments</div>
+                                <ul class="list-group list-group-flush">
+                                    {issue.comments.map(comment => {
+                                        return (
+                                            <li class="list-group-item">
+                                                {comment.value}
+                                                <br />
+                                                <p className="text-muted">
+                                                    - {comment.author.username}
+                                                </p>
+                                            </li>
+                                        );
+                                    })}
+                                    {!issue.isResolved && newComment}
+                                </ul>
+                            </div>
                         </div>
                         <div className="col-xs-12 col-md-4">
                             <div
@@ -225,6 +264,7 @@ class ViewIssue extends Component {
 ViewIssue.propTypes = {
     getIssue: PropTypes.func.isRequired,
     solveIssue: PropTypes.func.isRequired,
+    newComment: PropTypes.func.isRequired,
     getPermissions: PropTypes.func.isRequired,
     issue: PropTypes.object.isRequired,
     auth: PropTypes.object.isRequired,
@@ -240,5 +280,5 @@ const mapStateToProps = state => ({
 
 export default connect(
     mapStateToProps,
-    { getIssue, getPermissions, solveIssue }
+    { getIssue, getPermissions, solveIssue, newComment }
 )(ViewIssue);

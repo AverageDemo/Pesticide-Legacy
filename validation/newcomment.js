@@ -4,10 +4,10 @@ const isEmpty = require("./is-empty");
 module.exports = validateNewCommentInput = data => {
     let errors = {};
 
-    data.value = !isEmpty(data.value) ? data.value : "";
+    data.comment = !isEmpty(data.comment) ? data.comment : "";
 
-    if (Validator.isEmpty(data.value)) {
-        errors.value = "Text field is required";
+    if (Validator.isEmpty(data.comment)) {
+        errors.comment = "Text field is required";
     }
 
     return { errors, isValid: isEmpty(errors) };

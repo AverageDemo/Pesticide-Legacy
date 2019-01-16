@@ -13,6 +13,7 @@ class NewIssue extends Component {
             reproduction: "",
             stackTrace: "",
             category: "",
+            isPrivate: false,
             errors: {}
         };
     }
@@ -37,7 +38,8 @@ class NewIssue extends Component {
             description: this.state.description,
             reproduction: this.state.reproduction,
             stackTrace: this.state.stackTrace,
-            category: this.state.category
+            category: this.state.category,
+            isPrivate: this.state.isPrivate
         };
 
         this.props.newIssue(issueData, this.props.history);
@@ -135,6 +137,16 @@ class NewIssue extends Component {
                                     {errors.category && (
                                         <div className="invalid-feedback">{errors.category}</div>
                                     )}
+                                </div>
+                                <div className="form-group">
+                                    <input
+                                        type="checkbox"
+                                        name="isPrivate"
+                                        checked={this.state.isPrivate || this.state.isPrivate}
+                                        value="true"
+                                        onChange={this.onChange}
+                                    />{" "}
+                                    Private?
                                 </div>
                                 <input type="submit" className="btn btn-dark btn-block mt-4" />
                             </form>

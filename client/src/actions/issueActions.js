@@ -31,3 +31,10 @@ export const solveIssue = (issueTag, history, issueData) => dispatch => {
         .then(res => history.go(0))
         .catch(err => console.log(err));
 };
+
+export const newComment = (issueTag, history, comment) => dispatch => {
+    axios
+        .post(`/api/issues/${issueTag}/comment`, comment)
+        .then(res => history.go(0))
+        .catch(err => console.log(err));
+};

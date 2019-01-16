@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { getHomeIssues } from "../../actions/issueActions";
+import { getPermissions } from "../../actions/authActions";
 
 class Landing extends Component {
     componentWillMount() {
@@ -11,14 +12,15 @@ class Landing extends Component {
 
     render() {
         const { issues } = this.props.issues;
-        let displayOpenIssues;
-        let displayClosedIssues;
+        const { permissions } = this.props.auth;
+
+        let displayOpenIssues, displayClosedIssues;
 
         if (issues) {
             displayOpenIssues = (
                 <div>
                     {issues
-                        .filter(issue => !issue.isResolved && !issue.isPrivate)
+                        .filter(issue => !issue.isResolved && (!issue.isPrivate || permissions))
                         .slice(0, 4)
                         .map(issue => {
                             return (
@@ -41,7 +43,7 @@ class Landing extends Component {
             displayClosedIssues = (
                 <div>
                     {issues
-                        .filter(issue => issue.isResolved && !issue.isPrivate)
+                        .filter(issue => issue.isResolved && (!issue.isPrivate || permissions))
                         .slice(0, 4)
                         // eslint-disable-next-line
                         .map(issue => {
@@ -131,17 +133,19 @@ class Landing extends Component {
 }
 
 Landing.propTypes = {
+    getPermissions: PropTypes.func.isRequired,
     getHomeIssues: PropTypes.func.isRequired,
     issues: PropTypes.object.isRequired,
     auth: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
+    permissions: state.permissions,
     issues: state.issues,
     auth: state.auth
 });
 
 export default connect(
     mapStateToProps,
-    { getHomeIssues }
+    { getHomeIssues, getPermissions }
 )(Landing);
