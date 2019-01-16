@@ -68,6 +68,7 @@ router.get("/:issueTag", (req, res) => {
 
     Issue.findOne({ tag: { $regex: new RegExp("^" + req.params.issueTag + "$", "i") } })
         .populate("category", ["name"])
+        .populate("comments.author", ["username"])
         .then(issue => {
             if (!issue) {
                 errors.issue = "Issue not found!";

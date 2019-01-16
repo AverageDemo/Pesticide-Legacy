@@ -48,7 +48,7 @@ class ViewIssue extends Component {
         let issueDisplay;
 
         if (issue) {
-            let reproduction, stackTrace, devNotes;
+            let reproduction, stackTrace, devNotes, comments;
 
             if (issue.reproduction) {
                 reproduction = (
@@ -79,6 +79,25 @@ class ViewIssue extends Component {
                         <div className="card-body">
                             <p className="card-text">{issue.devNotes}</p>
                         </div>
+                    </div>
+                );
+            }
+
+            if (issue.comments) {
+                comments = (
+                    <div className="card">
+                        <div className="card-header">Comments</div>
+                        <ul class="list-group list-group-flush">
+                            {issue.comments.map(comment => {
+                                return (
+                                    <li class="list-group-item">
+                                        {comment.value}
+                                        <br />
+                                        <p className="text-muted">- {comment.author.username}</p>
+                                    </li>
+                                );
+                            })}
+                        </ul>
                     </div>
                 );
             }
@@ -131,6 +150,8 @@ class ViewIssue extends Component {
                             {issue.reproduction && reproduction}
                             <br />
                             {issue.stackTrace && stackTrace}
+                            <br />
+                            {issue.comments && comments}
                         </div>
                         <div className="col-xs-12 col-md-4">
                             <div
