@@ -26,6 +26,11 @@ const IssueSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "categories"
     },
+    project: {
+        type: Schema.Types.ObjectId,
+        ref: "projects",
+        default: null
+    },
     github: {
         pullRequest: {
             type: String,

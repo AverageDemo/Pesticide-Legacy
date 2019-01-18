@@ -218,10 +218,8 @@ class ViewIssue extends Component {
                                             <td className="p-2">{issue.category.name}</td>
                                         </tr>
                                         <tr>
-                                            <th className="tableHeader p-2 text-muted">
-                                                Versions Affected
-                                            </th>
-                                            <td className="p-2">Not Yet Implemented</td>
+                                            <th className="tableHeader p-2 text-muted">Project</th>
+                                            <td className="p-2">{issue.project.name}</td>
                                         </tr>
                                     </tbody>
                                 </table>

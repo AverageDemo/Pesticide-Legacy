@@ -1,7 +1,8 @@
-import { GET_CATEGORIES } from "../actions/types";
+import { GET_CATEGORIES, GET_PROJECTS } from "../actions/types";
 
 const initialState = {
-    categories: null
+    categories: null,
+    projects: null
 };
 
 export default function(state = initialState, action) {
@@ -10,6 +11,11 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 categories: action.payload
+            };
+        case GET_PROJECTS:
+            return {
+                ...state,
+                projects: action.payload
             };
         default:
             return state;

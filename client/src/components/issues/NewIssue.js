@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import classnames from "classnames";
 import { connect } from "react-redux";
 import { newIssue } from "../../actions/issueActions";
-import { getCategories } from "../../actions/categoryActions";
+import { getCategories, getProjects } from "../../actions/helperActions";
 
 class NewIssue extends Component {
     constructor() {
@@ -14,6 +14,7 @@ class NewIssue extends Component {
             reproduction: "",
             stackTrace: "",
             category: "",
+            project: null,
             isPrivate: false,
             errors: {}
         };
@@ -21,6 +22,7 @@ class NewIssue extends Component {
 
     componentWillMount() {
         this.props.getCategories();
+        this.props.getProjects();
     }
 
     componentDidMount() {
@@ -32,6 +34,7 @@ class NewIssue extends Component {
     }
 
     onChange = e => {
+        console.log(e);
         this.setState({ [e.target.name]: e.target.value });
     };
 
@@ -44,6 +47,7 @@ class NewIssue extends Component {
             reproduction: this.state.reproduction,
             stackTrace: this.state.stackTrace,
             category: this.state.category,
+            project: this.state.project,
             isPrivate: this.state.isPrivate
         };
 
@@ -52,30 +56,19 @@ class NewIssue extends Component {
 
     render() {
         const { errors } = this.state;
-        const { categories } = this.props.categories;
-        let populateSelect;
+        const { categories, projects } = this.props.helpers;
+        let populateCategorySelect, populateProjectSelect;
 
         if (categories) {
-            this.state.category = categories[Object.keys(categories)[0]]._id;
+            populateCategorySelect = categories.map(category => {
+                return <option value={category._id}>{category.name}</option>;
+            });
+        }
 
-            populateSelect = (
-                <div className="form-group">
-                    <select
-                        class="form-control form-control-lg"
-                        value={this.state.category}
-                        onChange={this.onChange}
-                        className={classnames("form-control form-control-lg", {
-                            "is-invalid": errors.category
-                        })}
-                        name="category"
-                    >
-                        {categories.map(category => {
-                            return <option value={category._id}>{category.name}</option>;
-                        })}
-                    </select>
-                    {errors.category && <div className="invalid-feedback">{errors.category}</div>}
-                </div>
-            );
+        if (projects) {
+            populateProjectSelect = projects.map(project => {
+                return <option value={project._id}>{project.name}</option>;
+            });
         }
 
         return (
@@ -153,7 +146,39 @@ class NewIssue extends Component {
                                         <div className="invalid-feedback">{errors.stackTrace}</div>
                                     )}
                                 </div>
-                                {populateSelect}
+                                <div className="form-group">
+                                    <select
+                                        class="form-control form-control-lg"
+                                        value={this.state.category}
+                                        onChange={this.onChange}
+                                        className={classnames("form-control form-control-lg", {
+                                            "is-invalid": errors.category
+                                        })}
+                                        name="category"
+                                    >
+                                        <option selected="selected" value="null">
+                                            No Category Selected
+                                        </option>
+                                        {populateCategorySelect}
+                                    </select>
+                                    {errors.category && (
+                                        <div className="invalid-feedback">{errors.category}</div>
+                                    )}
+                                </div>
+                                <div className="form-group">
+                                    <select
+                                        class="form-control form-control-lg"
+                                        value={this.state.project}
+                                        onChange={this.onChange}
+                                        className="form-control form-control-lg"
+                                        name="project"
+                                    >
+                                        <option selected="selected" value="">
+                                            No Project
+                                        </option>
+                                        {populateProjectSelect}
+                                    </select>
+                                </div>
                                 <div className="form-group">
                                     <input
                                         type="checkbox"
@@ -179,19 +204,20 @@ class NewIssue extends Component {
 
 NewIssue.propTypes = {
     getCategories: PropTypes.func.isRequired,
+    getProjects: PropTypes.func.isRequired,
     newIssue: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired,
     errors: PropTypes.object.isRequired,
-    categories: PropTypes.object.isRequired
+    helpers: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
     auth: state.auth,
     errors: state.errors,
-    categories: state.categories
+    helpers: state.helpers
 });
 
 export default connect(
     mapStateToProps,
-    { newIssue, getCategories }
+    { newIssue, getCategories, getProjects }
 )(NewIssue);

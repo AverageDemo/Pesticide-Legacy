@@ -4,11 +4,13 @@ const router = express.Router();
 
 const keys = require("../../config/keys");
 const User = require("../../models/User");
-const Category = require("../../models/Category");
 const Issue = require("../../models/Issue");
+const Project = require("../../models/Project");
+const Category = require("../../models/Category");
 
 const validateNewIssueInput = require("../../validation/newissue");
 const validateNewCommentInput = require("../../validation/newcomment");
+const validateNewProjectInput = require("../../validation/newproject");
 const validateNewCategoryInput = require("../../validation/newcategory");
 
 /*
@@ -45,6 +47,7 @@ router.post("/newIssue", passport.authenticate("jwt", { session: false }), (req,
                 reproduction: req.body.reproduction,
                 stackTrace: req.body.stackTrace,
                 category: req.body.category,
+                project: req.body.project,
                 isPrivate: req.body.isPrivate
             });
 
@@ -57,7 +60,7 @@ router.post("/newIssue", passport.authenticate("jwt", { session: false }), (req,
 });
 
 /*
- * @route   GET api/issues/v/:issueTag
+ * @route   POST api/issues/v/:issueTag
  * @desc    View an issue
  * @access  Public
  */
@@ -70,6 +73,7 @@ router.post("/v/:issueTag", async (req, res) => {
             tag: { $regex: new RegExp("^" + req.params.issueTag + "$", "i") }
         })
             .populate("category", ["name"])
+            .populate("project", ["name"])
             .populate("comments.author", ["username"]);
 
         if (!issue) {
@@ -87,7 +91,7 @@ router.post("/v/:issueTag", async (req, res) => {
 
         res.json(issue);
     } catch (e) {
-        res.status(404).json(e);
+        res.status(404).json({ error: "Invalid Issue" });
     }
 });
 
@@ -214,6 +218,42 @@ router.post("/newCategory", passport.authenticate("jwt", { session: false }), (r
 });
 
 /*
+ * @route   POST api/issues/newProject
+ * @desc    Create a new project
+ * @access  Private / Admin
+ */
+
+router.post("/newProject", passport.authenticate("jwt", { session: false }), async (req, res) => {
+    const { errors, isValid } = validateNewProjectInput(req.body);
+
+    try {
+        const user = await User.findById(req.user.id);
+
+        if (!user.isAdmin) return res.status(401).json({ error: "Unauthorized" });
+        if (!isValid) return res.status(400).json(errors);
+
+        const project = await Project.findOne({
+            name: { $regex: new RegExp("^" + req.body.name + "$", "i") }
+        });
+
+        if (project) {
+            errors.title = "A project with this title already exists!";
+            return res.status(400).json(errors);
+        }
+
+        const newProject = new Project({
+            name: req.body.name
+        });
+
+        await newProject.save();
+
+        res.json(newProject);
+    } catch (e) {
+        res.status(400).json({ error: "An error has occured" });
+    }
+});
+
+/*
  * @route   GET api/issues/getCategories
  * @desc    Returns all categories
  * @access  Private
@@ -222,6 +262,18 @@ router.post("/newCategory", passport.authenticate("jwt", { session: false }), (r
 router.get("/getCategories", passport.authenticate("jwt", { session: false }), (req, res) => {
     Category.find()
         .then(categories => res.json(categories))
+        .catch(err => console.log(err));
+});
+
+/*
+ * @route   GET api/issues/getProjects
+ * @desc    Returns all projects
+ * @access  Private
+ */
+
+router.get("/getProjects", passport.authenticate("jwt", { session: false }), (req, res) => {
+    Project.find()
+        .then(projects => res.json(projects))
         .catch(err => console.log(err));
 });
 
