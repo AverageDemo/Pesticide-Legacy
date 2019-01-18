@@ -47,7 +47,7 @@ class Landing extends Component {
                         .slice(0, 4)
                         // eslint-disable-next-line
                         .map(issue => {
-                            if (!issue.isPrivate && issue.isResolved) {
+                            if (issue.isResolved) {
                                 return (
                                     <li className="list-group-item">
                                         <h4>

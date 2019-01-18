@@ -156,7 +156,9 @@ class ViewIssue extends Component {
 
             issueDisplay = (
                 <div>
-                    <h5 className="text-muted issueTag">{issue.tag}</h5>
+                    <h5 className="text-muted issueTag">
+                        {issue.tag} - {issue.isPrivate ? "Private" : "Public"}
+                    </h5>
                     <h2 classname="issueName">{issue.name}</h2>
                     <hr />
                     <div className="row">

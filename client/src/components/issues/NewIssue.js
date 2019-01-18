@@ -56,6 +56,8 @@ class NewIssue extends Component {
         let populateSelect;
 
         if (categories) {
+            this.state.category = categories[Object.keys(categories)[0]]._id;
+
             populateSelect = (
                 <div className="form-group">
                     <select
