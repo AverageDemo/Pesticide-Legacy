@@ -18,8 +18,8 @@ class ViewIssue extends Component {
 
     componentWillMount() {
         const { issueTag } = this.props.match.params;
-        this.props.getIssue(issueTag, this.props.history);
         this.props.getPermissions(this.props.auth.user.id);
+        this.props.getIssue(issueTag, this.props.history, this.props.auth.user);
     }
 
     componentWillReceiveProps(nextProps) {

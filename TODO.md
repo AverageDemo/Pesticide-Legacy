@@ -4,13 +4,13 @@ Some things I have to fix / add:
 
 ADD:
 
+Project addition<br />
+Dev-groups based on issue tag<br />
 2FA<br />
 OAuth<br />
 GitHub / SVN / Perforce Integration<br />
-Developer status<br />
 Administrator panel and settings<br />
 Ability to customize site title and various other things<br />
-Dev-groups so only certain groups can view certain issues<br />
 Search features<br />
 
 FIX:

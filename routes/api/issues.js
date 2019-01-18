@@ -62,21 +62,33 @@ router.post("/newIssue", passport.authenticate("jwt", { session: false }), (req,
  * @access  Public
  */
 
-router.get("/v/:issueTag", (req, res) => {
+router.post("/v/:issueTag", async (req, res) => {
     const { errors } = {};
 
-    Issue.findOne({ tag: { $regex: new RegExp("^" + req.params.issueTag + "$", "i") } })
-        .populate("category", ["name"])
-        .populate("comments.author", ["username"])
-        .then(issue => {
-            if (!issue) {
-                errors.issue = "Issue not found!";
-                return res.status(404).json(errors);
-            }
-
-            res.json(issue);
+    try {
+        const issue = await Issue.findOne({
+            tag: { $regex: new RegExp("^" + req.params.issueTag + "$", "i") }
         })
-        .catch(err => res.status(400).json({ error: "Invalid issue!" }));
+            .populate("category", ["name"])
+            .populate("comments.author", ["username"]);
+
+        if (!issue) {
+            errors.issue = "Issue not found!";
+            return res.status(404).json(errors);
+        }
+
+        if (issue.isPrivate) {
+            const user = await User.findById(req.body.id);
+
+            if (!user || !user.isDeveloper || !user.isAdmin) {
+                return res.status(401).json({ error: "Unauthorized" });
+            }
+        }
+
+        res.json(issue);
+    } catch (e) {
+        res.status(404).json(e);
+    }
 });
 
 /*

@@ -18,9 +18,9 @@ export const getHomeIssues = () => dispatch => {
 };
 
 // Get specific issues
-export const getIssue = (issueTag, history) => dispatch => {
+export const getIssue = (issueTag, history, userID) => dispatch => {
     axios
-        .get(`/api/issues/v/${issueTag}`)
+        .post(`/api/issues/v/${issueTag}`, userID)
         .then(res => dispatch({ type: GET_ISSUE, payload: res.data }))
         .catch(err => history.push("/not-found"));
 };
