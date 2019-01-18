@@ -22,3 +22,5 @@ The re-rendering and pre-fetching of data
 Fix the way recently closed issues gets populated
 
 Touch up the category dropdown on issue submission
+
+The fact that I didn't even use async / await because lazy. Don't cringe, this will be fixed.
