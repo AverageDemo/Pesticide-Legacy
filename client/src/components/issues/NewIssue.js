@@ -162,7 +162,10 @@ class NewIssue extends Component {
                                         value="true"
                                         onChange={this.onChange}
                                     />{" "}
-                                    Private?
+                                    Private?{" "}
+                                    <span class="text-muted">
+                                        - Only developers or administrators will see this issue
+                                    </span>
                                 </div>
                                 <input type="submit" className="btn btn-dark btn-block mt-4" />
                             </form>

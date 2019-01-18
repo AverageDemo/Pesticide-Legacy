@@ -18,8 +18,6 @@ const validateNewCategoryInput = require("../../validation/newcategory");
  */
 
 router.get("/", (req, res) => {
-    const errors = {};
-
     Issue.find()
         .sort({ _id: -1 })
         .populate("category", ["name"])
@@ -79,42 +77,6 @@ router.get("/v/:issueTag", (req, res) => {
             res.json(issue);
         })
         .catch(err => res.status(400).json({ error: "Invalid issue!" }));
-});
-
-/*
- * @route   POST api/issues/newCategory
- * @desc    Create a new category
- * @access  Private / Admin
- */
-
-router.post("/newCategory", passport.authenticate("jwt", { session: false }), (req, res) => {
-    const { errors, isValid } = validateNewCategoryInput(req.body);
-
-    User.findById(req.user.id)
-        .then(user => {
-            if (!user.isAdmin) return res.status(401).json({ error: "Unauthorized" });
-
-            if (!isValid) return res.status(400).json(errors);
-
-            Category.findOne({ name: { $regex: new RegExp("^" + req.body.name + "$", "i") } })
-                .then(category => {
-                    if (category) {
-                        errors.title = "A category with this title already exists!";
-                        return res.status(400).json(errors);
-                    }
-
-                    const newCategory = new Category({
-                        name: req.body.name
-                    });
-
-                    newCategory
-                        .save()
-                        .then(newCategory => res.json(newCategory))
-                        .catch(err => console.log(err));
-                })
-                .catch(err => console.log(err));
-        })
-        .catch(err => console.log(err));
 });
 
 /*
@@ -183,6 +145,56 @@ router.post("/v/:issueTag/close", passport.authenticate("jwt", { session: false 
             )
                 .then(issue => {
                     res.json(issue);
+                })
+                .catch(err => console.log(err));
+        })
+        .catch(err => console.log(err));
+});
+
+/*
+ * @route   GET api/search/:query
+ * @desc    Search for an issue by title or tag
+ * @access  Public
+ */
+
+router.get("/search/:query", (req, res) => {
+    Issue.find({
+        $or: [{ tag: req.params.query }, { name: { $regex: req.params.query, $options: "i" } }]
+    })
+        .then(issue => res.json(issue))
+        .catch(err => console.log(err));
+});
+
+/*
+ * @route   POST api/issues/newCategory
+ * @desc    Create a new category
+ * @access  Private / Admin
+ */
+
+router.post("/newCategory", passport.authenticate("jwt", { session: false }), (req, res) => {
+    const { errors, isValid } = validateNewCategoryInput(req.body);
+
+    User.findById(req.user.id)
+        .then(user => {
+            if (!user.isAdmin) return res.status(401).json({ error: "Unauthorized" });
+
+            if (!isValid) return res.status(400).json(errors);
+
+            Category.findOne({ name: { $regex: new RegExp("^" + req.body.name + "$", "i") } })
+                .then(category => {
+                    if (category) {
+                        errors.title = "A category with this title already exists!";
+                        return res.status(400).json(errors);
+                    }
+
+                    const newCategory = new Category({
+                        name: req.body.name
+                    });
+
+                    newCategory
+                        .save()
+                        .then(newCategory => res.json(newCategory))
+                        .catch(err => console.log(err));
                 })
                 .catch(err => console.log(err));
         })

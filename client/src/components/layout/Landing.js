@@ -6,9 +6,26 @@ import { getHomeIssues } from "../../actions/issueActions";
 import { getPermissions } from "../../actions/authActions";
 
 class Landing extends Component {
+    constructor() {
+        super();
+        this.state = {
+            searchQuery: ""
+        };
+    }
+
     componentWillMount() {
         this.props.getHomeIssues();
     }
+
+    onChange = e => {
+        this.setState({ [e.target.name]: e.target.value });
+    };
+
+    onSubmit = e => {
+        e.preventDefault();
+
+        console.log(this.state.searchQuery);
+    };
 
     render() {
         const { issues } = this.props.issues;
@@ -80,7 +97,7 @@ class Landing extends Component {
                         <span className="h5 text-muted">Issues</span>
                         <hr />
                     </p>
-                    <form>
+                    <form onSubmit={this.onSubmit}>
                         <div className="form-group mb-4">
                             <h4 id="searchHelp" className="form-text text-muted mb-3">
                                 You can search by <strong>name</strong> or <strong>ID</strong>
@@ -89,6 +106,8 @@ class Landing extends Component {
                             <div class="input-group mb-3">
                                 <input
                                     type="text"
+                                    name="searchQuery"
+                                    onChange={this.onChange}
                                     aria-describedby="searchHelp"
                                     className="form-control"
                                     placeholder="Search for an issue."
@@ -96,8 +115,9 @@ class Landing extends Component {
                                 <div class="input-group-append">
                                     <button
                                         class="btn btn-outline-secondary"
-                                        type="button"
+                                        type="submit"
                                         id="searchHelp"
+                                        name="submit"
                                     >
                                         <i className="fas fa-search" />
                                     </button>
