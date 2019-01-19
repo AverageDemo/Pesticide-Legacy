@@ -1,3 +1,14 @@
 # Pesticide
 
-Note on Private Issues, currently only admins and developers can see private issues, not the community.
+This will be updated later on.
+
+Some info:
+
+-   Developers and admins can see private issues
+-   Projects are in. Dev groups are going to be added. If an issue is created for a specific project and there are developers specifically assigned to that project and the issue is made private then only the developers on the project can see it.
+-   The home page and issue loading will be made prettier at the end.
+-   I am going to clean up the code, don't worry ;)
+
+To use:
+
+-   If you pull it, just run `npm run dev` to start the entire project.
