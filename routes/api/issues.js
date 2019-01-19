@@ -33,30 +33,30 @@ router.get("/", (req, res) => {
  * @access  Private
  */
 
-router.post("/newIssue", passport.authenticate("jwt", { session: false }), (req, res) => {
+router.post("/newIssue", passport.authenticate("jwt", { session: false }), async (req, res) => {
     const { errors, isValid } = validateNewIssueInput(req.body);
 
     if (!isValid) return res.status(400).json(errors);
 
-    Issue.countDocuments()
-        .then(count => {
-            const newIssue = new Issue({
-                name: req.body.name,
-                tag: `${keys.issuePrefix}${count}`,
-                description: req.body.description,
-                reproduction: req.body.reproduction,
-                stackTrace: req.body.stackTrace,
-                category: req.body.category,
-                project: req.body.project,
-                isPrivate: req.body.isPrivate
-            });
+    try {
+        const count = await Issue.countDocuments();
 
-            newIssue
-                .save()
-                .then(newIssue => res.json(newIssue))
-                .catch(err => console.log(err));
-        })
-        .catch(err => console.log(err));
+        const newIssue = new Issue({
+            name: req.body.name,
+            tag: `${keys.issuePrefix}${count}`,
+            description: req.body.description,
+            reproduction: req.body.reproduction,
+            stackTrace: req.body.stackTrace,
+            category: req.body.category,
+            project: req.body.project,
+            isPrivate: req.body.isPrivate
+        });
+
+        await newIssue.save();
+        res.json(newIssue);
+    } catch (e) {
+        res.status(400).json({ error: "An error has occured" });
+    }
 });
 
 /*
@@ -104,36 +104,38 @@ router.post("/v/:issueTag", async (req, res) => {
 router.post(
     "/v/:issueTag/comment",
     passport.authenticate("jwt", { session: false }),
-    (req, res) => {
+    async (req, res) => {
         const { errors, isValid } = validateNewCommentInput(req.body);
 
         if (!isValid) return res.status(400).json(errors);
 
-        Issue.findOne({ tag: { $regex: new RegExp("^" + req.params.issueTag + "$", "i") } })
-            .then(issue => {
-                if (!issue) {
-                    errors.issue = "Issue not found!";
-                    return res.status(404).json(errors);
-                }
+        try {
+            const issue = await Issue.findOne({
+                tag: { $regex: new RegExp("^" + req.params.issueTag + "$", "i") }
+            });
 
-                if (issue.isResolved) {
-                    errors.issue = "This issue is closed!";
-                    return res.status(400).json(errors);
-                }
+            if (!issue) {
+                errors.issue = "Issue not found!";
+                return res.status(404).json(errors);
+            }
 
-                const newComment = {
-                    value: req.body.comment,
-                    author: req.user.id
-                };
+            if (issue.isResolved) {
+                errors.issue = "This issue is closed!";
+                return res.status(400).json(errors);
+            }
 
-                issue.comments.unshift(newComment);
+            const newComment = {
+                value: req.body.comment,
+                author: req.user.id
+            };
 
-                issue
-                    .save()
-                    .then(issue => res.json(issue))
-                    .catch(err => console.log(err));
-            })
-            .catch(err => console.log(err));
+            issue.comments.unshift(newComment);
+
+            await issue.save();
+            res.json(issue);
+        } catch (e) {
+            res.status(400).json({ error: "An error has occured" });
+        }
     }
 );
 
@@ -143,13 +145,17 @@ router.post(
  * @access  Private / admin / developer
  */
 
-router.post("/v/:issueTag/close", passport.authenticate("jwt", { session: false }), (req, res) => {
-    User.findById(req.user.id)
-        .then(user => {
+router.post(
+    "/v/:issueTag/close",
+    passport.authenticate("jwt", { session: false }),
+    async (req, res) => {
+        try {
+            const user = await User.findById(req.user.id);
+
             if (!user.isAdmin && !user.isDeveloper)
                 return res.status(401).json({ error: "Unauthorized" });
 
-            Issue.findOneAndUpdate(
+            const issue = await Issue.findOneAndUpdate(
                 { tag: { $regex: new RegExp("^" + req.params.issueTag + "$", "i") } },
                 {
                     $set: {
@@ -158,14 +164,14 @@ router.post("/v/:issueTag/close", passport.authenticate("jwt", { session: false 
                         dateUpdated: Date.now()
                     }
                 }
-            )
-                .then(issue => {
-                    res.json(issue);
-                })
-                .catch(err => console.log(err));
-        })
-        .catch(err => console.log(err));
-});
+            );
+
+            res.json(issue);
+        } catch (e) {
+            res.status(400).json({ error: "An error has occured" });
+        }
+    }
+);
 
 /*
  * @route   GET api/search/:query
@@ -187,34 +193,34 @@ router.get("/search/:query", (req, res) => {
  * @access  Private / Admin
  */
 
-router.post("/newCategory", passport.authenticate("jwt", { session: false }), (req, res) => {
+router.post("/newCategory", passport.authenticate("jwt", { session: false }), async (req, res) => {
     const { errors, isValid } = validateNewCategoryInput(req.body);
 
-    User.findById(req.user.id)
-        .then(user => {
-            if (!user.isAdmin) return res.status(401).json({ error: "Unauthorized" });
+    try {
+        const user = await User.findById(req.user.id);
 
-            if (!isValid) return res.status(400).json(errors);
+        if (!user.isAdmin) return res.status(401).json({ error: "Unauthorized" });
+        if (!isValid) return res.status(400).json(errors);
 
-            Category.findOne({ name: { $regex: new RegExp("^" + req.body.name + "$", "i") } })
-                .then(category => {
-                    if (category) {
-                        errors.title = "A category with this title already exists!";
-                        return res.status(400).json(errors);
-                    }
+        const category = await Category.findOne({
+            name: { $regex: new RegExp("^" + req.body.name + "$", "i") }
+        });
 
-                    const newCategory = new Category({
-                        name: req.body.name
-                    });
+        if (category) {
+            errors.title = "A category with this title already exists!";
+            return res.status(400).json(errors);
+        }
 
-                    newCategory
-                        .save()
-                        .then(newCategory => res.json(newCategory))
-                        .catch(err => console.log(err));
-                })
-                .catch(err => console.log(err));
-        })
-        .catch(err => console.log(err));
+        const newCategory = new Category({
+            name: req.body.name
+        });
+
+        await newCategory.save();
+
+        res.json(newCategory);
+    } catch (e) {
+        res.status(400).json({ error: "An error has occured" });
+    }
 });
 
 /*

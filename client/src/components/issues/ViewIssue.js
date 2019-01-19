@@ -61,7 +61,7 @@ class ViewIssue extends Component {
         let issueDisplay;
 
         if (issue) {
-            let reproduction, stackTrace, devNotes;
+            let reproduction, stackTrace, devNotes, comments;
 
             if (issue.reproduction) {
                 reproduction = (
@@ -154,6 +154,26 @@ class ViewIssue extends Component {
                 </li>
             );
 
+            if (issue.comments.length > 0) {
+                comments = (
+                    <div className="card">
+                        <div className="card-header">Comments</div>
+                        <ul class="list-group list-group-flush">
+                            {issue.comments.map(comment => {
+                                return (
+                                    <li class="list-group-item">
+                                        {comment.value}
+                                        <br />
+                                        <p className="text-muted">- {comment.author.username}</p>
+                                    </li>
+                                );
+                            })}
+                            {!issue.isResolved && newComment}
+                        </ul>
+                    </div>
+                );
+            }
+
             issueDisplay = (
                 <div>
                     <h5 className="text-muted issueTag">
@@ -176,23 +196,7 @@ class ViewIssue extends Component {
                             <br />
                             {issue.stackTrace && stackTrace}
                             <br />
-                            <div className="card">
-                                <div className="card-header">Comments</div>
-                                <ul class="list-group list-group-flush">
-                                    {issue.comments.map(comment => {
-                                        return (
-                                            <li class="list-group-item">
-                                                {comment.value}
-                                                <br />
-                                                <p className="text-muted">
-                                                    - {comment.author.username}
-                                                </p>
-                                            </li>
-                                        );
-                                    })}
-                                    {!issue.isResolved && newComment}
-                                </ul>
-                            </div>
+                            {comments}
                         </div>
                         <div className="col-xs-12 col-md-4">
                             <div
@@ -219,7 +223,11 @@ class ViewIssue extends Component {
                                         </tr>
                                         <tr>
                                             <th className="tableHeader p-2 text-muted">Project</th>
-                                            <td className="p-2">{issue.project.name}</td>
+                                            <td className="p-2">
+                                                {issue.project
+                                                    ? issue.project.name
+                                                    : "Not Assigned"}
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
