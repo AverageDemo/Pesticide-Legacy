@@ -198,7 +198,7 @@ router.put(
             if (!devGroup) return res.status(404).json({ error: "Invalid development group" });
 
             try {
-                const findAddedUser = await User.findById(req.body.userID);
+                const validateUser = await User.findById(req.body.userID);
             } catch (e) {
                 return res.status(404).json({ error: "Invalid user supplied" });
             }
@@ -231,6 +231,27 @@ router.put(
         try {
             const user = await User.findById(req.user.id);
             if (!user.isAdmin) return res.status(401).json({ error: "Unauthorized" });
+
+            const devGroup = await DevGroup.findOneAndUpdate({ _id: req.params.devGroup });
+
+            if (!devGroup) return res.status(404).json({ error: "Invalid development group" });
+
+            try {
+                const validateProject = await Project.findById(req.body.projectID);
+            } catch (e) {
+                return res.status(404).json({ error: "Invalid project supplied" });
+            }
+
+            if (devGroup.projects.find(project => project.projectID == req.body.projectID))
+                return res.status(400).json({ error: "Project already in development group" });
+
+            devGroup.projects.unshift({
+                projectID: req.body.projectID
+            });
+
+            await devGroup.save();
+
+            res.json(devGroup);
         } catch (e) {
             next(e);
         }
