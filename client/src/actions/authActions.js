@@ -13,7 +13,7 @@ export const registerUser = (userData, history) => dispatch => {
 };
 
 // User login - jwt
-export const loginUser = userData => dispatch => {
+export const loginUser = userData => async dispatch => {
     axios
         .post("/api/users/login", userData)
         .then(res => {
