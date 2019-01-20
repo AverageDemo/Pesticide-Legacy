@@ -15,3 +15,5 @@ Some info:
 To use:
 
 -   If you pull it, just run `npm run dev` to start the entire project.
+
+Postman collection included
