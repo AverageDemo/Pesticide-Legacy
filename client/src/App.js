@@ -18,6 +18,8 @@ import Register from "./components/auth/Register";
 import NewIssue from "./components/issues/NewIssue";
 import ViewIssue from "./components/issues/ViewIssue";
 
+import AdminDashboard from "./components/admin/Dashboard";
+
 import "./App.css";
 
 if (localStorage.jwtToken) {
@@ -42,6 +44,7 @@ class App extends Component {
                             <Navbar />
                             <Switch>
                                 <Route exact path="/" component={Landing} />
+                                <Route exact path="/admin" component={AdminDashboard} />
                                 <Route exact path="/register" component={Register} />
                                 <Route exact path="/login" component={Login} />
                                 <Route exact path="/newIssue" component={NewIssue} />

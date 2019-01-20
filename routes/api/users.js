@@ -267,4 +267,13 @@ router.get("/iselevated", passport.authenticate("jwt", { session: false }), (req
     return req.user.isAdmin || req.user.isDeveloper ? res.json(true) : res.json(false);
 });
 
+/*
+ * @route   GET api/users/isadmin
+ * @desc    Checks if a user is an admin
+ * @access  Private
+ */
+router.get("/isadmin", passport.authenticate("jwt", { session: false }), (req, res) => {
+    return req.user.isAdmin ? res.json(true) : res.json(false);
+});
+
 module.exports = router;
