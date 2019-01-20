@@ -27,7 +27,7 @@ export const getIssue = (issueTag, history, userID) => dispatch => {
 
 export const solveIssue = (issueTag, history, issueData) => dispatch => {
     axios
-        .post(`/api/issues/v/${issueTag}/close`, issueData)
+        .put(`/api/issues/v/${issueTag}/close`, issueData)
         .then(res => history.go(0))
         .catch(err => console.log(err));
 };

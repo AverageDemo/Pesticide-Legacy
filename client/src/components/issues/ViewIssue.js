@@ -154,7 +154,7 @@ class ViewIssue extends Component {
                 </li>
             );
 
-            if (issue.comments.length > 0) {
+            if ((issue.isResolved && issue.comments.length > 0) || !issue.isResolved) {
                 comments = (
                     <div className="card">
                         <div className="card-header">Comments</div>

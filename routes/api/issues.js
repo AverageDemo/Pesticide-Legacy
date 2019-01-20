@@ -140,12 +140,12 @@ router.post(
 );
 
 /*
- * @route   POST api/issues/v/:issueTag/close
+ * @route   PUT api/issues/v/:issueTag/close
  * @desc    Mark an issue as solved
  * @access  Private / admin / developer
  */
 
-router.post(
+router.put(
     "/v/:issueTag/close",
     passport.authenticate("jwt", { session: false }),
     async (req, res) => {

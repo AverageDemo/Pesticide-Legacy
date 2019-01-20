@@ -10,14 +10,16 @@ const validateLoginInput = require("../../validation/login");
 const validateRegisterInput = require("../../validation/register");
 
 const keys = require("../../config/keys");
+
 const User = require("../../models/User");
+const DevGroup = require("../../models/DevGroup");
 
 /*
  * @route   POST api/users/register
  * @desc    Register a new user
  * @access  Public
  */
-router.post("/register", async (req, res) => {
+router.post("/register", async (req, res, next) => {
     const { errors, isValid } = validateRegisterInput(req.body);
 
     if (!isValid) {
@@ -75,7 +77,7 @@ router.post("/register", async (req, res) => {
  * @desc    Login user / return JWT
  * @access  Public
  */
-router.post("/login", async (req, res) => {
+router.post("/login", async (req, res, next) => {
     const { errors, isValid } = validateLoginInput(req.body);
 
     if (!isValid) {
@@ -127,7 +129,7 @@ router.post("/login", async (req, res) => {
  * @desc    Activate a user
  * @access  Public
  */
-router.get("/activate/:token", async (req, res) => {
+router.get("/activate/:token", async (req, res, next) => {
     const veriToken = req.params.token;
 
     try {
@@ -145,6 +147,95 @@ router.get("/activate/:token", async (req, res) => {
         next(e);
     }
 });
+
+/*
+ * @route   POST api/users/newDevGroup
+ * @desc    Create a new dev group
+ * @access  Private / admin
+ */
+router.post(
+    "/newDevGroup",
+    passport.authenticate("jwt", { session: false }),
+    async (req, res, next) => {
+        try {
+            const user = await User.findById(req.user.id);
+            if (!user.isAdmin) return res.status(401).json({ error: "Unauthorized" });
+
+            const devGroup = await DevGroup.findOne({
+                name: { $regex: new RegExp("^" + req.body.name + "$", "i") }
+            });
+
+            if (devGroup) return res.status(400).json({ name: "Development group already exists" });
+
+            const newDevGroup = new DevGroup({
+                name: req.body.name
+            });
+
+            await newDevGroup.save();
+
+            res.json(newDevGroup);
+        } catch (e) {
+            next(e);
+        }
+    }
+);
+
+/*
+ * @route   PUT api/users/addUser/:devGroup
+ * @desc    Add a user to a dev group
+ * @access  Private / admin
+ */
+router.put(
+    "/addUser/:devGroup",
+    passport.authenticate("jwt", { session: false }),
+    async (req, res, next) => {
+        try {
+            const user = await User.findById(req.user.id);
+            if (!user.isAdmin) return res.status(401).json({ error: "Unauthorized" });
+
+            const devGroup = await DevGroup.findOneAndUpdate({ _id: req.params.devGroup });
+
+            if (!devGroup) return res.status(404).json({ error: "Invalid development group" });
+
+            try {
+                const findAddedUser = await User.findById(req.body.userID);
+            } catch (e) {
+                return res.status(404).json({ error: "Invalid user supplied" });
+            }
+
+            if (devGroup.users.find(user => user.userID == req.body.userID))
+                return res.status(400).json({ error: "User already in development group" });
+
+            devGroup.users.unshift({
+                userID: req.body.userID
+            });
+
+            await devGroup.save();
+
+            res.json(devGroup);
+        } catch (e) {
+            next(e);
+        }
+    }
+);
+
+/*
+ * @route   PUT api/users/addProject/:devGroup
+ * @desc    Add a project to a dev group
+ * @access  Private / admin
+ */
+router.put(
+    "/addProject/:devGroup",
+    passport.authenticate("jwt", { session: false }),
+    async (req, res, next) => {
+        try {
+            const user = await User.findById(req.user.id);
+            if (!user.isAdmin) return res.status(401).json({ error: "Unauthorized" });
+        } catch (e) {
+            next(e);
+        }
+    }
+);
 
 /*
  * @route   GET api/users/iselevated
