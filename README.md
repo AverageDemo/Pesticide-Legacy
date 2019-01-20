@@ -9,7 +9,7 @@ Some info:
 -   The home page and issue loading will be made prettier at the end.
 -   I am going to clean up the code, don't worry ;)
 -   Some of the administrative functions don't make much sense because I'm not using things like arrays to pass data to them YET. This will be fixed up once an admin panel is created.
-    -   For instance, adding users to a dev group. You can select multiple then apply and it will add them. Currently you can only do one at a time.
+    -   For instance, adding users to a dev group. You will be able to select multiple users then apply and it will add them. Currently you can only do one at a time.
 
 To use:
 
