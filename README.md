@@ -10,6 +10,7 @@ Some info:
 -   I am going to clean up the code, don't worry ;)
 -   Some of the administrative functions don't make much sense because I'm not using things like arrays to pass data to them YET. This will be fixed up once an admin panel is created.
     -   For instance, adding users to a dev group. You will be able to select multiple users then apply and it will add them. Currently you can only do one at a time.
+-   Currently dev groups can be assigned projects and developers. Other than that their functionality is useless at the moment. I will add proper usage to this soon.
 
 To use:
 
