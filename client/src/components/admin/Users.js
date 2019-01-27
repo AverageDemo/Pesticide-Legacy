@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import "../../Admin.css";
 
-class Dashboard extends Component {
+class Users extends Component {
     constructor() {
         super();
         this.state = {
@@ -30,12 +30,12 @@ class Dashboard extends Component {
                         <div className="sidebar-sticky">
                             <ul className="nav flex-column">
                                 <li className="nav-item">
-                                    <Link className="nav-link active" to="/admin">
+                                    <Link className="nav-link" to="/admin">
                                         Dashboard <span className="sr-only">(current)</span>
                                     </Link>
                                 </li>
                                 <li className="nav-item">
-                                    <Link className="nav-link" to="/admin/users">
+                                    <Link className="nav-link active" to="/admin/users">
                                         Users
                                     </Link>
                                 </li>
@@ -68,7 +68,7 @@ class Dashboard extends Component {
     }
 }
 
-Dashboard.propTypes = {
+Users.propTypes = {
     auth: PropTypes.object.isRequired
 };
 
@@ -79,4 +79,4 @@ const mapStateToProps = state => ({
 export default connect(
     mapStateToProps,
     {}
-)(Dashboard);
+)(Users);

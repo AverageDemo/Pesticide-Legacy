@@ -19,6 +19,10 @@ import NewIssue from "./components/issues/NewIssue";
 import ViewIssue from "./components/issues/ViewIssue";
 
 import AdminDashboard from "./components/admin/Dashboard";
+import AdminCategories from "./components/admin/Categories";
+import AdminDevGroups from "./components/admin/DevGroups";
+import AdminUsers from "./components/admin/Users";
+import AdminIssues from "./components/admin/Issues";
 
 import "./App.css";
 
@@ -44,7 +48,13 @@ class App extends Component {
                             <Navbar />
                             <Switch>
                                 <Route exact path="/" component={Landing} />
+
                                 <Route exact path="/admin" component={AdminDashboard} />
+                                <Route exact path="/admin/categories" component={AdminCategories} />
+                                <Route exact path="/admin/devgroups" component={AdminDevGroups} />
+                                <Route exact path="/admin/users" component={AdminUsers} />
+                                <Route exact path="/admin/issues" component={AdminIssues} />
+
                                 <Route exact path="/register" component={Register} />
                                 <Route exact path="/login" component={Login} />
                                 <Route exact path="/newIssue" component={NewIssue} />
