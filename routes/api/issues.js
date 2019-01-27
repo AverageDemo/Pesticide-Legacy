@@ -203,7 +203,7 @@ router.post("/newCategory", passport.authenticate("jwt", { session: false }), as
         if (!isValid) return res.status(400).json(errors);
 
         const category = await Category.findOne({
-            name: { $regex: new RegExp("^" + req.body.name + "$", "i") }
+            name: { $regex: new RegExp("^" + req.body.categoryName + "$", "i") }
         });
 
         if (category) {
@@ -212,7 +212,7 @@ router.post("/newCategory", passport.authenticate("jwt", { session: false }), as
         }
 
         const newCategory = new Category({
-            name: req.body.name
+            name: req.body.categoryName
         });
 
         await newCategory.save();
