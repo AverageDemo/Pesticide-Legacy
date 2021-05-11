@@ -1,5 +1,7 @@
 # Pesticide
 
+Work on this project will resume this year (2021)
+
 This will be updated later on.
 
 Some info:
