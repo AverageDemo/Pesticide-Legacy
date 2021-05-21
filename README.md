@@ -1,6 +1,6 @@
 # Pesticide
 
-Work on this project will resume this year (2021)
+This is the legacy version. New version can be found [here](https://github.com/AverageDemo/Pesticide)
 
 This will be updated later on.
 
